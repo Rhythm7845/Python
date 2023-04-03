@@ -57,7 +57,7 @@ objects = [
     { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 1 }
 ]
 #Declaes the lights in the scene.
-light = { 'position': np.array([0,8,3]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([1, 1, 1]), 'specular': np.array([1, 1, 1]) },
+light = { 'position': np.array([5,8,3]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([1, 1, 1]), 'specular': np.array([1, 1, 1]) }
 
 #Main RayTracing loop.
 image = np.zeros((height,width,3))
@@ -84,7 +84,7 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
                 break
             illumination = np.zeros((3))
             illumination += nearest_object['ambient'] * light['ambient']
-            illumination += nearest_object['diffuse'] * light['diffuse'] * np.dot(intersection_to_light, normal_to_surface)
+            illumination += nearest_object['diffuse'] * light['diffuse'] * (1 - 1.05*np.arccos(np.dot(intersection_to_light, normal_to_surface)))
             intersection_to_camera = normalise(camera - intersection)
             H = normalise(intersection_to_light + intersection_to_camera)
             illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['shininess'] / 4)

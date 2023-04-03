@@ -2,6 +2,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Global variables.
+
+max_depth = 8
+width = 640
+height = 480
+
 #Function to normalise a vector.
 
 def normalise(vector):
@@ -32,10 +38,10 @@ def nearest_intersected_object(objects, ray_origin, ray_direction):
             nearest_object = objects[index]
     return nearest_object, min_distance
 
-#Defining Screen size.
+#Reflects the ray based on the normal of the sphere.
 
-width = 640
-height = 480
+def reflected(vector, axis):
+    return vector - 2 * np.dot(vector, axis) * axis
 
 #Defining camera and screen.
 
@@ -78,6 +84,7 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
         H = normalise(intersection_to_light + intersection_to_camera)
         illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['roughness'] / 4)
         image[i, j] = np.clip(illumination, 0, 1)
+        color = np.zeros((3))
         
     print("Progress: %d / %d rows." % (i + 1, height))
         

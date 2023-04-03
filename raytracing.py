@@ -52,25 +52,27 @@ screen = (-1,1/ratio,1,-1/ratio) #Sccreen perfectly fits the camera.
 #Declares Scene Objects.
 
 objects = [
-    { 'center': np.array([-0.2, 0, -1]), 'radius': 0.7, 'ambient': np.array([0.1, 0, 0]), 'diffuse': np.array([0.7, 0, 0]), 'specular': np.array([1, 1, 1]), 'roughness': 100, 'reflection': 0.1 },
-    { 'center': np.array([0, -9000, 0]), 'radius': 9000 - 0.7, 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'roughness': 100, 'reflection': 0.1 }
+    { 'center': np.array([-1, 0, -1]), 'radius': 0.75, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.8, 0.7, 0.075]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0.3 },
+    { 'center': np.array([1, 0, -1]), 'radius': 0.75, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.075, 0.7, 0.8]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0.3 },
+    { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 1 }
 ]
 #Declaes the lights in the scene.
-light = { 'position': np.array([-10, -10, -10]), 'ambient': np.array([1, 1, 1]), 'diffuse': np.array([1, 1, 1]), 'specular': np.array([1, 1, 1]) }
+light = { 'position': np.array([0,8,3]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([1, 1, 1]), 'specular': np.array([1, 1, 1]) },
 
 #Main RayTracing loop.
 image = np.zeros((height,width,3))
 for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
     for j,x in enumerate(np.linspace(screen[0], screen[2], width)):
-        pixel = np.array([x,y,0])
+        pixel = np.array([x, y, 0])
         origin = camera
         direction = normalise(pixel - origin)
         color = np.zeros((3))
         reflection = 1
         for k in range(max_depth):
+
             nearest_object, min_distance = nearest_intersected_object(objects, origin, direction)
             if nearest_object is None:
-                continue
+                break
             intersection = origin + min_distance * direction
             normal_to_surface = normalise(intersection - nearest_object['center'])
             shifted_point = intersection + 1e-5 * normal_to_surface
@@ -79,20 +81,17 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
             intersection_to_light_distance = np.linalg.norm(light['position'] - intersection)
             is_shadowed = min_distance < intersection_to_light_distance
             if is_shadowed:
-                continue
+                break
             illumination = np.zeros((3))
             illumination += nearest_object['ambient'] * light['ambient']
             illumination += nearest_object['diffuse'] * light['diffuse'] * np.dot(intersection_to_light, normal_to_surface)
             intersection_to_camera = normalise(camera - intersection)
             H = normalise(intersection_to_light + intersection_to_camera)
-            illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['roughness'] / 4)
+            illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['shininess'] / 4)
             color += reflection * illumination
             reflection *= nearest_object['reflection']
             origin = shifted_point
             direction = reflected(direction, normal_to_surface)
-            image[i, j] = np.clip(color, 0, 1)
-            color = np.zeros((3))
-        
-    print("Progress: %d / %d rows." % (i + 1, height))
-        
+        image[i, j] = np.clip(color, 0, 1)     
+    print("Progress: %d / %d rows." % (i + 1, height))        
 plt.imsave("render.png", image) #Saves the final render.

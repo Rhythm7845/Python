@@ -65,26 +65,33 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
         pixel = np.array([x,y,0])
         origin = camera
         direction = normalise(pixel - origin)
-        nearest_object, min_distance = nearest_intersected_object(objects, origin, direction)
-        if nearest_object is None:
-            continue
-        intersection = origin + min_distance * direction
-        normal_to_surface = normalise(intersection - nearest_object['center'])
-        shifted_point = intersection + 1e-5 * normal_to_surface
-        intersection_to_light = normalise(light['position'] - shifted_point)
-        _, min_distance = nearest_intersected_object(objects, shifted_point, intersection_to_light)
-        intersection_to_light_distance = np.linalg.norm(light['position'] - intersection)
-        is_shadowed = min_distance < intersection_to_light_distance
-        if is_shadowed:
-            continue
-        illumination = np.zeros((3))
-        illumination += nearest_object['ambient'] * light['ambient']
-        illumination += nearest_object['diffuse'] * light['diffuse'] * np.dot(intersection_to_light, normal_to_surface)
-        intersection_to_camera = normalise(camera - intersection)
-        H = normalise(intersection_to_light + intersection_to_camera)
-        illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['roughness'] / 4)
-        image[i, j] = np.clip(illumination, 0, 1)
         color = np.zeros((3))
+        reflection = 1
+        for k in range(max_depth):
+            nearest_object, min_distance = nearest_intersected_object(objects, origin, direction)
+            if nearest_object is None:
+                continue
+            intersection = origin + min_distance * direction
+            normal_to_surface = normalise(intersection - nearest_object['center'])
+            shifted_point = intersection + 1e-5 * normal_to_surface
+            intersection_to_light = normalise(light['position'] - shifted_point)
+            _, min_distance = nearest_intersected_object(objects, shifted_point, intersection_to_light)
+            intersection_to_light_distance = np.linalg.norm(light['position'] - intersection)
+            is_shadowed = min_distance < intersection_to_light_distance
+            if is_shadowed:
+                continue
+            illumination = np.zeros((3))
+            illumination += nearest_object['ambient'] * light['ambient']
+            illumination += nearest_object['diffuse'] * light['diffuse'] * np.dot(intersection_to_light, normal_to_surface)
+            intersection_to_camera = normalise(camera - intersection)
+            H = normalise(intersection_to_light + intersection_to_camera)
+            illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['roughness'] / 4)
+            color += reflection * illumination
+            reflection *= nearest_object['reflection']
+            origin = shifted_point
+            direction = reflected(direction, normal_to_surface)
+            image[i, j] = np.clip(color, 0, 1)
+            color = np.zeros((3))
         
     print("Progress: %d / %d rows." % (i + 1, height))
         

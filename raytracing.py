@@ -52,12 +52,12 @@ screen = (-1,1/ratio,1,-1/ratio) #Sccreen perfectly fits the camera.
 #Declares Scene Objects.
 
 objects = [
-    { 'center': np.array([-1, 0, -1]), 'radius': 0.75, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.8, 0.7, 0.075]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0 },
-    { 'center': np.array([1, 0, -1]), 'radius': 0.75, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.075, 0.7, 0.8]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0 },
-    { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([0.5, 0.5, 0.5]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 0 }
+    { 'center': np.array([-1, 0, -1]), 'radius': 0.75, 'ambient': np.array([2, 2, 2]), 'diffuse': np.array([0.8, 0.7, 0.075]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0 },
+    { 'center': np.array([1, 0, -1]), 'radius': 0.75, 'ambient': np.array([2, 2, 2]), 'diffuse': np.array([0.075, 0.7, 0.8]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0 },
+    { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([2, 2, 2]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 0 }
 ]
 #Declaes the lights in the scene.
-light = { 'position': np.array([5,8,3]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([1, 1, 1]), 'specular': np.array([1, 1, 1]) }
+light = { 'position': np.array([10,16,6]), 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([9, 9, 9]), 'specular': np.array([1, 1, 1]) }
 
 #Main RayTracing loop.
 image = np.zeros((height,width,3))
@@ -84,7 +84,7 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
                 break
             illumination = np.zeros((3))
             illumination += nearest_object['ambient'] * light['ambient']
-            illumination += nearest_object['diffuse'] * light['diffuse'] * (1 - *np.arccos(np.dot(intersection_to_light, normal_to_surface)))
+            illumination += nearest_object['diffuse'] * light['diffuse'] * (1 - 0.9*np.arccos(np.dot(intersection_to_light, normal_to_surface)))
             intersection_to_camera = normalise(camera - intersection)
             H = normalise(intersection_to_light + intersection_to_camera)
             illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['shininess'] / 4)

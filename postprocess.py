@@ -4,12 +4,12 @@ import cv2
 
 n = input("Do you want a blur effect with higher resoultion or downsampling? (b / d)")
 if n == 'b':
-    image = cv2.imread('C://Users//rhyth//Downloads//Test\College Projects//Python//render.png')
+    image = cv2.imread('C://Users//rhyth//Downloads//Test//College Projects//Python//render.png')
     Gaussian = cv2.GaussianBlur(image, (3, 3), 0)
     filename = 'render_post.png'
     cv2.imwrite(filename, Gaussian)
 elif n == 'd':
-    image = cv2.imread('C://Users//rhyth//Downloads//Test\College Projects//Python//render.png')
+    image = cv2.imread('C://Users//rhyth//Downloads//Test//College Projects//Python//render.png')
     image = cv2.resize(image, (0, 0), fx = 0.5, fy = 0.5)
     filename = 'render_post.png'
     cv2.imwrite(filename, image)

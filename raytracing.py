@@ -57,10 +57,18 @@ objects = [
     { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 5 }
 ]
 #Declaes the lights in the scene.
-lights = [  { 'position': np.array([9.5,16,6.5]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([0.5, 0.5, 0.5]), 'specular': np.array([1, 1, 1]) },
-            { 'position': np.array([10.5,16,5.5]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([0.5, 0.5, 0.5]), 'specular': np.array([1, 1, 1]) },
-            { 'position': np.array([9.5,16,5.5]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([0.5, 0.5, 0.5]), 'specular': np.array([1, 1, 1]) },
-            { 'position': np.array([10.5,16,6.5]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([0.5, 0.5, 0.5]), 'specular': np.array([1, 1, 1]) },
+lights = [  { 'position': np.array([10.125,16,5.5]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([10.25,16,5.625]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([10.375,16,5.75]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([10.5,16,5.875]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([10,16,6]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([9.875,16,6.125]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([9.75,16,6.25]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([9.625,16,6.375]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([9.5,16,6.5]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) }
+        
+        
+        
         ]
 #Main RayTracing loop.
 image = np.zeros((height,width,3))

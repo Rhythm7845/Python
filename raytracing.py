@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #Global variables.
 
-max_depth = 8
+max_depth = 4
 width = 800
 height = 600
 
@@ -52,12 +52,12 @@ screen = (-1,1/ratio,1,-1/ratio) #Sccreen perfectly fits the camera.
 #Declares Scene Objects.
 
 objects = [
-    { 'center': np.array([-1, 0, -1]), 'radius': 0.75, 'ambient': np.array([2, 2, 2]), 'diffuse': np.array([0.8, 0.7, 0.075]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0 },
-    { 'center': np.array([1, 0, -1]), 'radius': 0.75, 'ambient': np.array([2, 2, 2]), 'diffuse': np.array([0.075, 0.7, 0.8]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0 },
-    { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([2, 2, 2]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 0 }
+    { 'center': np.array([-1, -0.5, -1]), 'radius': .5, 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([0.8, 0.7, 0.075]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0.75 },
+    { 'center': np.array([1, -0.5, -1]), 'radius': .5, 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([0.075, 0.7, 0.8]), 'specular': np.array([0.5, 0.5, 0.5]), 'shininess': 100, 'reflection': 0.75 },
+    { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 5 }
 ]
 #Declaes the lights in the scene.
-light = { 'position': np.array([10,16,6]), 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([2, 2, 2]), 'specular': np.array([1, 1, 1]) }
+light = { 'position': np.array([10,16,6]), 'ambient': np.array([0.1, 0.1, 0.1]), 'diffuse': np.array([2, 2, 2]), 'specular': np.array([1, 1, 1]) }
 
 #Main RayTracing loop.
 image = np.zeros((height,width,3))
@@ -80,15 +80,14 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
             intersection_to_light_distance = np.linalg.norm(light['position'] - intersection)
             is_shadowed = min_distance < intersection_to_light_distance
             if is_shadowed:
-                break
+               break
             illumination = np.zeros((3))
-            illumination += nearest_object['ambient'] * light['ambient']
-            illumination += nearest_object['diffuse'] * light['diffuse'] * (1 - 0.63661977236759*np.arccos(np.dot(intersection_to_light, normal_to_surface)))
+            illumination += nearest_object['diffuse'] * light['diffuse'] * (1 - 0.63662*np.arccos(np.dot(intersection_to_light, normal_to_surface)))
             intersection_to_camera = normalise(camera - intersection)
             H = normalise(intersection_to_light + intersection_to_camera)
             illumination += nearest_object['specular'] * light['specular'] * np.dot(normal_to_surface, H) ** (nearest_object['shininess'] / 4)
             color += reflection * illumination
-            reflection *= nearest_object['reflection']
+            reflection *= nearest_object['reflection']*nearest_object['diffuse']*illumination
             origin = shifted_point
             direction = reflected(direction, normal_to_surface)
         image[i, j] = np.clip(color, 0, 1)     

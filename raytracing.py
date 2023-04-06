@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 #Global variables.
 
 max_depth = 4
-width = 800
-height = 600
+width = 400
+height = 300
+exposure = 1
+gamma = 2.2
 
 #Function to normalise a vector.
 
@@ -57,19 +59,19 @@ objects = [
     { 'center': np.array([0, -9000, 0]), 'radius': 8999, 'ambient': np.array([0, 0, 0]), 'diffuse': np.array([0.6, 0.6, 0.6]), 'specular': np.array([1, 1, 1]), 'shininess': 100, 'reflection': 5 }
 ]
 #Declaes the lights in the scene.
-lights = [  { 'position': np.array([10.125,16,5.5]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([10.25,16,5.625]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([10.375,16,5.75]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([10.5,16,5.875]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([10,16,6]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([9.875,16,6.125]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([9.75,16,6.25]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([9.625,16,6.375]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
-            { 'position': np.array([9.5,16,6.5]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) }
+lights = [  #{ 'position': np.array([10.125,16,5.5]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            #{ 'position': np.array([10.25,16,5.625]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            #{ 'position': np.array([10.375,16,5.75]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            #{ 'position': np.array([10.5,16,5.875]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            { 'position': np.array([10,16,6]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([2, 2, 2]), 'specular': np.array([1, 1, 1]) },
+            #{ 'position': np.array([9.875,16,6.125]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            #{ 'position': np.array([9.75,16,6.25]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            #{ 'position': np.array([9.625,16,6.375]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) },
+            #{ 'position': np.array([9.5,16,6.5]), 'ambient': np.array([0.125, 0.125, 0.125]), 'diffuse': np.array([0.25, 0.25, 0.25]), 'specular': np.array([0.125, 0.125, 0.125]) }
         
         
         
-        ]
+         ]
 #Main RayTracing loop.
 image = np.zeros((height,width,3))
 for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
@@ -102,6 +104,7 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
             reflection *= nearest_object['reflection']*nearest_object['diffuse']*illumination
             origin = shifted_point
             direction = reflected(direction, normal_to_surface)
+        color = color * exposure +((gamma*-1)+2.2)
         image[i, j] = np.clip(color, 0, 1)     
     print("Progress: %d / %d rows." % (i + 1, height))        
 plt.imsave("render.png", image) #Saves the final render.

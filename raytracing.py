@@ -1,6 +1,7 @@
 #Importing the libraries.
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 #Global variables.
 
@@ -106,5 +107,18 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
             direction = reflected(direction, normal_to_surface)
         color = color * exposure +((gamma*-1)+2.2)
         image[i, j] = np.clip(color, 0, 1)     
-    print("Progress: %d / %d rows." % (i + 1, height))        
-plt.imsave("render.png", image) #Saves the final render.
+    print("Progress: %d / %d rows." % (i + 1, height))   
+     
+def path_finder(path):
+    if os.name == "nt":
+        return path.replace("/", "\\")
+    else:
+        return path.replace("\\", "/")
+
+# Path to the original render.
+render = os.path.dirname(os.path.abspath(
+    __file__)) + "/imgs/render.png"
+# Making sure the path is correct for the OS.
+render = path_finder(render)
+
+plt.imsave(render, image) #Saves the final render.

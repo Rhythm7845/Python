@@ -6,8 +6,8 @@ import os
 #Global variables.
 
 max_depth = 4
-width = 400
-height = 300
+width = 800
+height = 600
 exposure = 1
 gamma = 2.2
 
@@ -107,7 +107,7 @@ for i,y in enumerate(np.linspace(screen[1], screen[3], height)):
             direction = reflected(direction, normal_to_surface)
         color = color * exposure +((gamma*-1)+2.2)
         image[i, j] = np.clip(color, 0, 1)     
-    print("Progress: %d / %d rows." % (i + 1, height))   
+    print(" %d / %d " % (i + 1, height))   
      
 def path_finder(path):
     if os.name == "nt":

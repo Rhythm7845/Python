@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 #Global variables.
 
 max_depth = 4
-width = 400
-height = 300
+width = 800
+height = 600
 exposure = 1
 gamma = 2.2
 

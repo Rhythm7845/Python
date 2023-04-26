@@ -7,7 +7,7 @@ bin_dic_fin = dict()
 
 def nearest_power_of_2(dec_temp):
     power = 0
-    while (dec_temp > 2 ** power):
+    while (dec_temp >= 2 ** power):
         power +=1
     if power == 0:
         bin_dic_str[str(power)] = 1

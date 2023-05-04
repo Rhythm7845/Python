@@ -12,15 +12,18 @@ class Store:
         print(self.name, "     ", self.price)
         
         
-tea = Store(103, 20, "Tea")
-coffee = Store(104, 50, "Cofee")
+tea = Store(101, 10, "Tea")
+coffee = Store(102, 30, "Cofee")
+lemonade = Store(103, 20, "Lemonade")
 
 print("MENU:")
 tea.GetInfo()
 coffee.GetInfo()
+lemonade.getinfo()
 
 tea.SetQuantity(int(input("Set Quantity: ")))
 coffee.SetQuantity(int(input("Set Quantity: ")))
+lemonade.SetQuantity(int(input("Set Quantity: ")))
 tea_p = tea.price * tea.quant
 coffee_p = coffee.price * coffee.quant
 

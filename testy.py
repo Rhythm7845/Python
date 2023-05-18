@@ -3,6 +3,7 @@ class Player:
         self.name = str(name)
         self.runRate = int(run_rate)
         self.matches = int(matches)
+        self.type = type
     def showStats(self):
         print(self.name, self.runRate, self.matches)
         
@@ -12,4 +13,8 @@ kush.showStats()
 shubh = Player("Shubh", 1, 999)
 shubh.showStats()
 
-Team_CSK = {kush, shubh}
+Team = [kush, shubh]
+
+for i in range(len(Team)):
+    Team[i].showStats()
+    

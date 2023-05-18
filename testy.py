@@ -1,9 +1,15 @@
-class Student:  
-    # Constructor - parameterized  
-    def __init__(self, name):  
-        print("This is parametrized constructor")  
-        self.name = name  
-    def show(self):  
-        print("Hello",self.name)  
-student = Student("Rhythm")  
-student.show()
+class Player:  
+    def __init__(self, name, run_rate, matches):  
+        self.name = str(name)
+        self.runRate = int(run_rate)
+        self.matches = int(matches)
+    def showStats(self):
+        print(self.name, self.runRate, self.matches)
+        
+kush = Player("kush", 1000, 2)
+kush.showStats()
+
+shubh = Player("Shubh", 1, 999)
+shubh.showStats()
+
+Team_CSK = {kush, shubh}
